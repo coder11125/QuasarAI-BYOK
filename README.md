@@ -37,7 +37,7 @@ That's it — you're ready to chat!
 - 💬 **Chat** — have full conversations with memory of what was said
 - 📎 **Attach files** — share images, code, text files, and more
 - 🔊 **Read replies aloud** — click the speaker icon on any message
-- 🌙 **Dark & Light mode** — switches automatically based on your system
+- 🌙 **Dark & Light mode** — switches automatically based on your browser's theme
 - 💾 **Saves your chats** — all conversations are stored on your device
 - 📋 **Copy & export** — copy any message or download a full chat
 
