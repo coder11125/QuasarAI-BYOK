@@ -1,4 +1,4 @@
-# Quasar AI
+# Quasar AI BYOK Edition
 
 Your personal AI assistant — runs straight from your browser, no installs required.
 
@@ -65,3 +65,6 @@ Chats are stored in your browser. Clearing your browser data will erase them. Us
 
 **It doesn't work on my phone**
 The app is designed for desktop browsers. It may work on mobile but isn't optimised for it yet.
+
+---
+Quasar AI (BYOK Edition) v1.0 (Pre-release)
