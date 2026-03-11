@@ -36,7 +36,7 @@ That's it — you're ready to chat!
 
 - 💬 **Chat** — have full conversations with memory of what was said
 - 📎 **Attach files** — share images, code, text files, and more
-- 🔊 **Read replies aloud** — click the speaker icon on any message
+- 🎙 **Hears your voice clear and aloud** — uses the Web Speech API for voice recognition
 - 🌙 **Dark & Light mode** — switches automatically based on your browser's theme
 - 💾 **Saves your chats** — all conversations are stored on your device
 - 📋 **Copy & export** — copy any message or download a full chat
@@ -67,7 +67,7 @@ Chats are stored in your browser. Clearing your browser data will erase them. Us
 The app is designed for desktop browsers. It may work on mobile but isn't optimised for it yet.
 
 ---
-Quasar AI (BYOK Edition) v1.0 (Pre-release)
+Quasar AI (BYOK Edition) v1.1 (Pre-release)
 
 **Note 1:** For the best experience, please scale the application up to 125%
 
