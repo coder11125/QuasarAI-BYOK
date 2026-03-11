@@ -1,9 +1,9 @@
-#***🚀 The 45-Minute Build:*** How Quasar AI Was Created
+# ***🚀 The 45-Minute Build:*** How Quasar AI Was Created
 
 This project wasn't built over weeks—it was a 45-minute sprint to create a professional, privacy-first AI assistant. Here is the "behind the scenes" of the development process.
 
 
-##***🛠️ The Tech Stack***
+## ***🛠️ The Tech Stack***
 
 •Engine: Vanilla JavaScript (ES6+)
 
@@ -14,7 +14,7 @@ This project wasn't built over weeks—it was a 45-minute sprint to create a pro
 •AI Partner: Claude 4.6 Sonnet.
 
 
-##***⏱️ The Timeline (45 Minutes)***
+## ***⏱️ The Timeline (45 Minutes)***
 
 0-10 min: Concept and Wireframing. I decided on a BYOK (Bring Your Own Key) model to ensure 100% user privacy.
 
@@ -26,13 +26,13 @@ This project wasn't built over weeks—it was a 45-minute sprint to create a pro
 
 
 
-##***🤖 The AI Prompting Strategy***
+## ***🤖 The AI Prompting Strategy***
 I didn't just ask for "an AI app." I used iterative prompting.
 The Master Prompt (og. somewhat like this):
 "Build a single-file HTML/JS AI assistant with a clean, modern UI. Use a 'Settings' gear icon to handle API keys via localStorage. Include a system prompt editor and 4 voice options (Aria, Nova, Sage, Lyra). The design should look like a professional SaaS product."
 
 
-##***💡 Lessons Learned***
+## ***💡 Lessons Learned***
 
 •AI is a Force Multiplier: Using Claude allowed me to focus on the User Experience (UX) while the AI handled the boilerplate code.
 
@@ -41,6 +41,6 @@ The Master Prompt (og. somewhat like this):
 •Speed Wins: Shipping a "Minimum Viable Product" (MVP) in under an hour is better than spending a month on a project that never launches.
 
 
-##***✨ What's Next?***
+## ***✨ What's Next?***
 
 If you want to contribute to this fast-paced project, check out our Contributing Guide or open an issue!
