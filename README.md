@@ -68,3 +68,4 @@ The app is designed for desktop browsers. It may work on mobile but isn't optimi
 
 ---
 Quasar AI (BYOK Edition) v1.0 (Pre-release)
+**Note:** For the best experience, please scale the application up to 125%
