@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Quasar AI</title>
+<title>Quasar AI · BYOK Edition</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <style>
 :root {
@@ -226,7 +226,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
   <!-- Sidebar -->
   <div id="sidebar">
     <div id="sidebar-header">
-      <span>Quasar AI</span>
+      <span>Quasar AI · BYOK</span>
       <button id="new-chat-btn" onclick="newChat()">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         New
@@ -268,6 +268,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
         <h2>Hi, I'm Quasar AI</h2>
+        <p style="font-size:11px;opacity:.35;margin-top:-4px">BYOK Edition</p>
         <p>Ask anything or attach files.</p>
         <div id="suggestions">
           <div class="suggestion" onclick="useSuggestion(this)">✍️ Help me write something</div>
@@ -514,6 +515,58 @@ function addTypingIndicator() {
   return wrap;
 }
 
+// ── Streaming bubble helpers ──
+function createStreamBubble() {
+  emptyEl.style.display = 'none';
+  const wrap = document.createElement('div');
+  wrap.className = 'msg assistant';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble streaming';
+  wrap.appendChild(bubble);
+  streamEl.appendChild(wrap);
+  scrollBottom();
+  return { wrap, bubble };
+}
+
+function finalizeStreamBubble(wrap, bubble, content, time) {
+  bubble.classList.remove('streaming');
+  bubble.innerHTML = marked.parse(content);
+
+  const footer = document.createElement('div');
+  footer.className = 'msg-footer';
+  footer.style.animation = 'fadeIn .3s ease';
+
+  const timeEl = document.createElement('span');
+  timeEl.className = 'msg-time'; timeEl.textContent = time;
+  footer.appendChild(timeEl);
+
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'msg-action'; copyBtn.title = 'Copy';
+  copyBtn.innerHTML = iconCopy();
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(content).then(() => {
+      copyBtn.classList.add('copied'); copyBtn.innerHTML = iconCheck();
+      setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.innerHTML = iconCopy(); }, 2000);
+    });
+  };
+  footer.appendChild(copyBtn);
+
+  const speakBtn = document.createElement('button');
+  speakBtn.className = 'msg-action'; speakBtn.title = 'Read aloud';
+  speakBtn.innerHTML = iconSpeak();
+  speakBtn.onclick = () => speakText(content, speakBtn);
+  footer.appendChild(speakBtn);
+
+  const retryBtn = document.createElement('button');
+  retryBtn.className = 'msg-action'; retryBtn.title = 'Retry';
+  retryBtn.innerHTML = iconRetry();
+  retryBtn.onclick = retryLast;
+  footer.appendChild(retryBtn);
+
+  wrap.appendChild(footer);
+  scrollBottom();
+}
+
 // ── Send ──
 async function send() {
   const text = inputEl.value.trim();
@@ -569,6 +622,7 @@ async function send() {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         max_tokens: 1000,
+        stream: true,
         messages: [
           { role: 'system', content: settings.systemPrompt },
           ...apiMessages,
@@ -583,11 +637,35 @@ async function send() {
       throw new Error(err?.error?.message || `HTTP ${res.status}`);
     }
 
-    const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || '…';
+    // Create streaming bubble
     const aTime = ts();
+    const { wrap, bubble } = createStreamBubble();
+    let reply = '';
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') break;
+        try {
+          const json = JSON.parse(data);
+          const token = json.choices?.[0]?.delta?.content || '';
+          if (token) { reply += token; bubble.innerHTML = marked.parse(reply); scrollBottom(); }
+        } catch(e) {}
+      }
+    }
+
+    finalizeStreamBubble(wrap, bubble, reply, aTime);
     chat.history.push({ role:'assistant', content: reply, time: aTime });
-    appendBubble('assistant', reply, [], aTime, chat.history.length-1, true);
     saveState();
 
   } catch(err) {
@@ -624,16 +702,38 @@ async function retryLast() {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         max_tokens: 1000,
+        stream: true,
         messages: [{ role: 'system', content: settings.systemPrompt }, ...apiMessages],
       })
     });
     typingEl.remove();
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || '…';
+
     const aTime = ts();
+    const { wrap, bubble } = createStreamBubble();
+    let reply = '';
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') break;
+        try {
+          const json = JSON.parse(data);
+          const token = json.choices?.[0]?.delta?.content || '';
+          if (token) { reply += token; bubble.innerHTML = marked.parse(reply); scrollBottom(); }
+        } catch(e) {}
+      }
+    }
+    finalizeStreamBubble(wrap, bubble, reply, aTime);
     chat.history.push({role:'assistant',content:reply,time:aTime});
-    appendBubble('assistant',reply,[],aTime,chat.history.length-1,true);
     saveState();
   } catch(err) {
     typingEl.remove();
