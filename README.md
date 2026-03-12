@@ -58,9 +58,11 @@ You can share the website with anyone. Each person will need to add their own AP
 ## Troubleshooting
 
 **The app isn't responding to my messages**
+
 Make sure you've added your API key in Settings. If the key is correct and it still doesn't work, try generating a new one from your provider.
 
 **My chats disappeared**
+
 Chats are stored in AppWrite Cloud. Signing out makes your previous chats disappear.
 
 ---
