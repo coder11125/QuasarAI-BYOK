@@ -1228,17 +1228,22 @@ function openSettingsModal() {
   const badgeEl = document.getElementById('provider-badge');
   keyInput.value = settings.apiKey;
   document.getElementById('system-prompt-input').value = settings.systemPrompt;
-  if (settings.provider) badgeEl.textContent = `Provider: ${settings.provider}`;
-  // populate saved model in dropdown
-  if (settings.model) {
-    const existing = select.querySelector(`option[value="${settings.model}"]`);
-    if (!existing) {
-      const opt = document.createElement('option');
-      opt.value = settings.model; opt.textContent = settings.model;
-      select.innerHTML = ''; select.appendChild(opt);
-    }
-    select.value = settings.model;
+  const provider = detectProvider(settings.apiKey) || settings.provider;
+  if (provider) badgeEl.textContent = `Provider: ${provider}`;
+  // Only show saved model if it matches current provider
+  select.innerHTML = '';
+  const model = settings.model;
+  if (model) {
+    const opt = document.createElement('option');
+    opt.value = model; opt.textContent = model;
+    select.appendChild(opt);
+    select.value = model;
+  } else {
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = '— click Fetch Models —';
+    select.appendChild(opt);
   }
+  document.getElementById('model-status').textContent = '';
   document.getElementById('modal-overlay').classList.add('open');
 }
 function closeModal() {
@@ -1247,8 +1252,11 @@ function closeModal() {
 function handleOverlayClick(e) { if (e.target===document.getElementById('modal-overlay')) closeModal(); }
 function saveSettings() {
   const key = document.getElementById('api-key-input').value.trim();
+  const newProvider = detectProvider(key) || 'groq';
+  // If provider changed, reset model
+  if (newProvider !== settings.provider) settings.model = '';
   settings.apiKey = key;
-  settings.provider = detectProvider(key) || 'groq';
+  settings.provider = newProvider;
   settings.model = document.getElementById('model-select').value || settings.model;
   settings.systemPrompt = document.getElementById('system-prompt-input').value.trim() || settings.systemPrompt;
   saveState(); closeModal(); showToast('Settings saved');
