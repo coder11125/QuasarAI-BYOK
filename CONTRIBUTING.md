@@ -124,7 +124,7 @@ When adding new features, add them to the relevant section or create a new label
 |---|---|---|
 | v1.0 | 10 Mar 2026 | Initial layout, BYOK setup, chat UI |
 | v1.1 | 11 Mar 2026 | OCR, voice recognition, chat history, theme toggle |
-| v1.2 | 12 Mar 2026 | Full mobile support, sidebar overlay, iPhone preview |
+| v1.2 | 12 Mar 2026 | Full mobile support, sidebar overlay |
 | v1.3 | 12 Mar 2026 | Appwrite auth, Google OAuth, cross-device sync, model selector |
 
 ---
