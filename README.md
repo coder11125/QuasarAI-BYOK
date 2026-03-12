@@ -65,7 +65,7 @@ Make sure you've added your API key in Settings. If the key is correct and it st
 Chats are stored in AppWrite Cloud. Signing out makes your previous chats disappear.
 
 ---
-Quasar AI (BYOK Edition) v1.2 (Pre-release)
+Quasar AI (BYOK Edition) v1.3 (Pre-release)
 
 **Note 1:** For the best experience, please scale the application up to 125%
 
