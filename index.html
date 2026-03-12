@@ -538,7 +538,9 @@ function loadState() {
 }
 function saveState() {
   try {
-    localStorage.setItem('ai_settings', JSON.stringify(settings));
+    const settingsToSave = { ...settings };
+    if (!currentUser) settingsToSave.apiKey = ''; // don't persist key without account
+    localStorage.setItem('ai_settings', JSON.stringify(settingsToSave));
     const trimmed = chats.map(c => ({ ...c, history: c.history.slice(-60) }));
     localStorage.setItem('ai_chats', JSON.stringify(trimmed));
   } catch(e){}
