@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Quasar AI · BYOK Edition</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -201,7 +201,59 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 .tray-remove{width:16px;height:16px;border:none;background:none;color:var(--text-sub);cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;border-radius:3px;flex-shrink:0;font-size:14px;line-height:1;transition:color .12s}
 .tray-remove:hover{color:var(--red)}
 
-/* Input bar */
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  html,body{font-size:15px}
+
+  /* Sidebar slides over content as an overlay */
+  #sidebar{
+    position:fixed;inset:0 auto 0 0;z-index:200;
+    width:80vw;max-width:300px;
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:none;
+  }
+  #sidebar.open{
+    transform:translateX(0);
+    box-shadow:4px 0 24px rgba(0,0,0,.18);
+  }
+  /* Backdrop when sidebar open */
+  #sidebar-backdrop{
+    display:none;position:fixed;inset:0;z-index:199;
+    background:rgba(0,0,0,.35);backdrop-filter:blur(2px);
+  }
+  #sidebar-backdrop.show{display:block}
+
+  /* Main always full width */
+  #main{width:100%;min-width:0}
+
+  /* Titlebar */
+  #titlebar{padding:0 10px;height:50px;padding-top:env(safe-area-inset-top)}
+  #chat-title{font-size:13px}
+
+  /* Stream */
+  #stream{padding:14px 10px 8px;gap:12px}
+  #stream>*{max-width:100%}
+
+  /* Messages wider on mobile */
+  .msg{max-width:92%}
+
+  /* Empty state */
+  #empty{max-width:100%;padding:20px 16px 60px}
+  #suggestions{max-width:100%}
+  .suggestion{font-size:12px;padding:5px 11px}
+
+  /* Input area */
+  #inputarea{padding:8px 10px calc(16px + env(safe-area-inset-bottom))}
+  #inputarea-inner{max-width:100%}
+  #input{font-size:15px}
+
+  /* Bubble pre scrolls on mobile */
+  .bubble pre{max-width:calc(92vw - 40px);overflow-x:auto}
+
+  /* Attachment preview smaller */
+  .attachment-preview img{max-width:160px;max-height:130px}
+}
 #inputbar{flex-shrink:0;width:100%}
 #inputarea{display:flex;flex-direction:column;align-items:center;padding:10px 20px 20px;border-top:1px solid var(--border);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);width:100%;box-sizing:border-box}
 #inputarea-inner{display:flex;align-items:stretch;width:100%;max-width:min(92%, 1100px)}
@@ -267,6 +319,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 <div id="layout">
 
   <!-- Sidebar -->
+  <div id="sidebar-backdrop" onclick="closeSidebarMobile()"></div>
   <div id="sidebar">
     <div id="sidebar-header">
       <span>Quasar AI</span>
@@ -392,6 +445,9 @@ let busy = false;
 let pendingFiles = [];
 let sidebarOpen = true;
 
+// On mobile, sidebar starts closed
+if (window.innerWidth <= 640) sidebarOpen = false;
+
 const streamEl   = document.getElementById('stream');
 const inputEl    = document.getElementById('input');
 const sendBtn    = document.getElementById('send');
@@ -429,7 +485,7 @@ function newChat(render=true) {
   currentChatId = id;
   if (render) { saveState(); renderChatList(); renderMessages(); }
 }
-function switchChat(id) { currentChatId = id; renderChatList(); renderMessages(); }
+function switchChat(id) { currentChatId = id; renderChatList(); renderMessages(); if (isMobile()) closeSidebarMobile(); }
 function deleteChat(id, e) {
   e.stopPropagation();
   chats = chats.filter(c => c.id !== id);
@@ -1000,9 +1056,24 @@ function toggleTheme() {
 applyTheme();
 
 // ── Sidebar ──
+function isMobile() { return window.innerWidth <= 640; }
+
 function toggleSidebar() {
-  sidebarOpen=!sidebarOpen;
-  document.getElementById('sidebar').classList.toggle('collapsed',!sidebarOpen);
+  if (isMobile()) {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const isOpen = sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', !isOpen);
+    backdrop.classList.toggle('show', !isOpen);
+  } else {
+    sidebarOpen = !sidebarOpen;
+    document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
+  }
+}
+
+function closeSidebarMobile() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('show');
 }
 
 // ── Utils ──
