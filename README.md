@@ -16,7 +16,7 @@ Quasar AI is a fast, clean AI chat app. You can use it on your computer, or shar
 You'll need an API key from an AI provider. The **only** options (for now) include:
 - [Groq](https://console.groq.com) — Vast API provider
 - [OpenAI](https://platform.openai.com) — OpenAI models
-- [Google AI Studio](https://aistudio.google.com) — Google Deepmind models
+- [Anthropic] (https://console.anthropic.com) — Anthropic models
 
 Sign up, create an API key, and copy it.
 
@@ -62,10 +62,7 @@ You can share the website with anyone. Each person will need to add their own AP
 Make sure you've added your API key in Settings. If the key is correct and it still doesn't work, try generating a new one from your provider.
 
 **My chats disappeared**
-Chats are stored in your browser. Clearing your browser data will erase them. Use the **Export** button in the sidebar to save important conversations.
-
-**It doesn't work on my phone**
-The app is designed for desktop browsers. It may work on mobile but isn't optimised for it yet.
+Chats are stored in AppWrite Cloud. Signing out makes your previous chats disappear.
 
 ---
 Quasar AI (BYOK Edition) v1.2 (Pre-release)
