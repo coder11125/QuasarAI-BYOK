@@ -6,7 +6,7 @@ Thanks for your interest in contributing! Quasar AI is a single-file, no-backend
 
 ## Project Structure
 
-Quasar AI is intentionally kept as a **single file** (`index.html`). Everything — HTML, CSS, and JS — lives in one place. This is by design to keep deployment as simple as possible (just push to GitHub Pages).
+Quasar AI is intentionally kept as a **single file** (`index.html`). Everything — HTML, CSS, and JS — lives in one place. This is by design to keep deployment as simple as possible (just push to GitHub Pages). We might change the project structure when the project becomes big, but for now the **single file** method is recommended for ease.
 
 ```
 QuasarAI-BYOK/
@@ -42,7 +42,7 @@ That's it — no `npm install`, no dev server needed.
 | Markdown | marked.js (CDN) |
 | OCR | Tesseract.js (CDN) |
 | Auth + Sync | Appwrite Cloud (Singapore) |
-| AI Providers | Groq, OpenAI, Anthropic |
+| AI Providers (supported) | Groq, OpenAI, Anthropic (More might be added in future) |
 | Hosting | GitHub Pages |
 
 ---
