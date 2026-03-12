@@ -38,7 +38,6 @@ That's it — you're ready to chat!
 - 📎 **Attach files** — share images, code, text files, and more
 - 🎙 **Hears your voice clear and aloud** — uses the Web Speech API for voice recognition
 - 🌙 **Dark & Light mode** — switches automatically based on your browser's theme
-- 💾 **Saves your chats** — all conversations are stored on your device
 - 📋 **Copy & export** — copy any message or download a full chat
 - 📱 **Now runs on your phone's web browser** - get the Quasar experience on your phone & load you chats via your registered account
 
